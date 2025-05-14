@@ -1,0 +1,49 @@
+slam_toolbox:
+  ros__parameters:
+    # Плагин решателя и его параметры
+    solver_plugin: "solver_plugins::CeresSolver"
+    ceres_linear_solver: "SPARSE_NORMAL_CHOLESKY" # или "CGNR", "ITERATIVE_SCHUR"
+    ceres_preconditioner: "SCHUR_JACOBI"         # или "JACOBI", "IDENTITY"
+    ceres_trust_region_strategy: "LEVENBERG_MARQUARDT" # или "DOGLEG"
+    ceres_dogleg_type: "TRADITIONAL_DOGLEG"      # или "SUBSPACE_DOGLEG"
+    ceres_loss_function: "None"                  # или "HuberLoss", "CauchyLoss" и т.д.
+
+    # --- Основные фреймы и топики ---
+    odom_frame: "odom"        # Ожидаемый фрейм от узла одометрии (TF: odom -> base_link)
+    base_frame: "base_link"   # Базовый фрейм робота (из TF, публикуемых robot_state_publisher)
+    map_frame: "map"          # Фрейм карты, создаваемый SLAM
+    scan_topic: "/scan"       # Входной топик LaserScan (выход из pointcloud_to_laserscan)
+    # odom_topic: "/odom"      # Можно явно указать, если отличается от /odom, но по умолчанию /odom
+
+    # Режим работы и основные параметры SLAM
+    mode: "mapping"           # "mapping" (создание карты) или "localization" (локализация на существующей карте)
+    use_scan_matching: true   # Использовать ли сопоставление сканов
+    use_scan_barycenter: true # Использовать ли барицентр скана для начального предположения
+    minimum_travel_distance: 0.2 # Минимальное расстояние для обработки нового узла графа (метры)
+    minimum_travel_heading: 0.1  # Минимальное изменение ориентации для обработки нового узла (радианы)
+
+    # Параметры буфера сканов
+    scan_buffer_size: 10          # Количество сканов в буфере для сопоставления
+    scan_buffer_maximum_scan_distance: 10.0 # Максимальное расстояние в скане, используемое для сопоставления
+
+    # Параметры сопоставления для создания связей и замыкания циклов
+    link_match_minimum_response_fine: 0.5 # Порог для тонкого сопоставления при создании связей
+    link_scan_maximum_distance: 1.5       # Максимальное расстояние между сканами для создания связей
+    loop_search_maximum_distance: 10.0    # Максимальное расстояние для поиска кандидатов на замыкание цикла
+    loop_match_minimum_response_coarse: 0.6 # Порог для грубого сопоставления при замыкании цикла
+    loop_match_maximum_scan_distance: 3.0   # Максимальное расстояние между сканами для замыкания цикла
+
+    # TF и время
+    tf_buffer_duration: 30.0       # Длительность буфера TF (секунды). Увеличьте, если есть ошибки "extrapolation"
+    transform_publish_period: 0.05 # Период публикации трансформации map->odom (секунды)
+    map_update_interval: 5.0       # Как часто публиковать обновления карты (секунды)
+    use_sim_time: True             # ОБЯЗАТЕЛЬНО для симуляции
+
+    # Другие параметры (можно оставить по умолчанию или настроить по необходимости)
+    # map_file_name: "my_map"      # Имя файла для сохранения/загрузки карты (без расширения)
+    # map_start_at_dock: false     # Начинать ли карту с док-станции (если есть)
+    # debug_logging: false         # Включить ли отладочные логи
+    # throttle_scans: 1            # Обрабатывать каждый N-ый скан (1 - каждый скан)
+
+    # Для асинхронного режима (async_slam_toolbox_node)
+    # thread_pool_size: 2          # Количество потоков для обработки

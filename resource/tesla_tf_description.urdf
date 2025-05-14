@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<robot name="tesla_tf_description">
+  <link name="base_link"/>
+
+  <link name="lidar_base"/>
+  <joint name="base_link_to_lidar_base_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_base"/>
+    <!-- Координаты из вашего PROTO для Lidar (name "lidar_base") -->
+    <origin xyz="-2.36 0 0.93" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Можно добавить inertial_unit, если TeslaDriver публикует его frame_id -->
+  <!-- <link name="inertial_unit"/> -->
+  <!-- <joint name="base_link_to_inertial_unit_joint" type="fixed"> -->
+  <!--   <parent link="base_link"/> -->
+  <!--   <child link="inertial_unit"/> -->
+  <!--   <origin xyz="0.4 0 -0.11" rpy="0 0 0"/> -->
+  <!-- </joint> -->
+</robot>
